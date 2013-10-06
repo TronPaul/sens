@@ -1,1 +1,5 @@
 sens/__pycache__
+build/
+dist/
+Sens.egg-info
+MANIFEST
