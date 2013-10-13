@@ -1,13 +1,16 @@
 import argparse
 import sys
-from sens import image
-from sens import status
+import sens.image
+import sens.status
 
 def main():
     parser = argparse.ArgumentParser(description='Generate twitch status image')
     parser.add_argument('channel_name', metavar='channel-name', help='Channel to pull data from')
     parser.add_argument('file', help='File to write image to')
     args = parser.parse_args()
-    s = status.get_status(args.channel_name)
-    img = image.build_image(s)
+    img = build_image(args.channel_name)
     img.save(args.file, format='png')
+
+def build_image(channel_name):
+    s = sens.status.get_status(channel_name)
+    return sens.image.build_image(s)
