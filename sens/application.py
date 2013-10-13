@@ -13,9 +13,9 @@ def main():
         img = build_image(args.channel_name)
         img.save(args.file, format='png')
     except sens.status.TwitchError as e:
-        print('Error retrieving channel data from Twitch.tv')
+        print('Error retrieving channel data from Twitch.tv', file=sys.stderr)
         if args.verbose:
-            print('Response: {json}'.format(json=e.json), sys.stderr)
+            print('Response: {json}'.format(json=e.json), file=sys.stderr)
 
 def build_image(channel_name):
     s = sens.status.get_status(channel_name)
