@@ -7,9 +7,10 @@ BASE_PATH = '/kraken'
 HEADERS = {'Accept':'application/vnd.twitchtv.v3+json'}
 
 class TwitchError(Exception):
-    def __init__(self, response, *args, **kwargs):
+    def __init__(self, response, json_data, *args, **kwargs):
         super(TwitchError, self).__init__(*args, **kwargs)
         self.response = response
+        self.json = json_data
 
 class ChannelNotFoundError(TwitchError):
     pass
@@ -18,11 +19,12 @@ def get_twitch_path(path):
     conn = http.client.HTTPSConnection(HOSTNAME)
     conn.request('GET', path, headers=HEADERS)
     resp = conn.getresponse()
+    json_data = json.load(io.TextIOWrapper(resp))
     if resp.status == 404:
-        raise ChannelNotFoundError(resp)
+        raise ChannelNotFoundError(resp, json_data)
     elif resp.status != 200:
-        raise TwitchError(resp)
-    return json.load(io.TextIOWrapper(resp))
+        raise TwitchError(resp, json_data)
+    return json_data
 
 def get_stream(channel_name):
     path = '{base}/streams/{channel_name}'.format(
