@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(name='Sens',
-      version='0.0.3',
+      version='0.0.4',
       description='A dynamic Twitch status image generator',
       author='Mark McGuire',
       author_email='???',
