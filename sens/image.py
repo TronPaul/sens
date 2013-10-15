@@ -15,26 +15,31 @@ def build_image(twitch_status):
     preview_url = twitch_status.preview_url
 
     img = Image.new('RGB', (400, 50))
-    logo_img = get_image_from_url(logo_url)
-    logo_img = logo_img.resize((50, 50))
-    img.paste(logo_img, (0,0,50,50))
+    if logo_url:
+        logo_img = get_image_from_url(logo_url)
+        logo_img = logo_img.resize((50, 50))
+        img.paste(logo_img, (0,0,50,50))
+        text_left = logo_img.size[0] + PADDING
+    else:
+        text_left = PADDING
 
     draw = ImageDraw.Draw(img)
 
     font = draw.getfont()
-    text_left = logo_img.size[0] + PADDING
-    draw.text((text_left,3), status, font=font)
+
+    if status:
+        draw.text((text_left, PADDING), status, font=font)
 
     info_text = '{name} streaming {game}'.format(name=name, game=game)
-    draw.text((text_left,18), info_text, font=font)
+    draw.text((text_left, 15 + PADDING), info_text, font=font)
 
     if online:
         online_width, _ = font.getsize(ONLINE)
-        draw.text((text_left, 33), ONLINE, font=font)
+        draw.text((text_left, 30 + PADDING), ONLINE, font=font)
 
         viewers_left = text_left + online_width + PADDING
         viewers_text = '{viewers} viewers'.format(viewers=viewers)
-        draw.text((viewers_left, 33), viewers_text)
+        draw.text((viewers_left, 30 + PADDING), viewers_text)
         viewers_right = font.getsize(viewers_text)[0] + viewers_left
 
         preview_max_left = viewers_right + PADDING
