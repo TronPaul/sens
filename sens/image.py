@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 ONLINE = 'ONLINE'
 OFFLINE = 'OFFLINE'
 PADDING = 3
+LOGO_NONE_URL = 'http://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
 
 def build_image(twitch_status):
     logo_url = twitch_status.logo_url
@@ -15,13 +16,12 @@ def build_image(twitch_status):
     preview_url = twitch_status.preview_url
 
     img = Image.new('RGB', (400, 50))
-    if logo_url:
-        logo_img = get_image_from_url(logo_url)
-        logo_img = logo_img.resize((50, 50))
-        img.paste(logo_img, (0,0,50,50))
-        text_left = logo_img.size[0] + PADDING
-    else:
-        text_left = PADDING
+
+    logo_url = logo_url if logo_url else LOGO_NONE_URL
+    logo_img = get_image_from_url(logo_url)
+    logo_img = logo_img.resize((50, 50))
+    img.paste(logo_img, (0,0,50,50))
+    text_left = logo_img.size[0] + PADDING
 
     draw = ImageDraw.Draw(img)
 
